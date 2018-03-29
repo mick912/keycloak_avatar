@@ -2,6 +2,7 @@ package com.lil.keycloak.avatar;
 
 import io.minio.MinioClient;
 import io.minio.errors.MinioException;
+import io.minio.policy.PolicyType;
 import org.apache.commons.io.FilenameUtils;
 import org.imgscalr.Scalr;
 import org.jboss.logging.Logger;
@@ -120,7 +121,7 @@ public class AvatarProvider implements RealmResourceProvider {
 
 
                 String avatarUrl = System.getenv("MINIO_URL") + "/" + bucket + "/"
-                        + user.getId() + "/" + origName + "%s" + "." + origExt;
+                        + user.getId() + "/" + user.getId() + "%s" + "." + origExt;
 
                 user.setAttribute("avatar", asList(avatarUrl));
 
@@ -128,7 +129,7 @@ public class AvatarProvider implements RealmResourceProvider {
                 thumb.delete();
                 medium.delete();
                 large.delete();
-
+                minioClient.setBucketPolicy(bucket, user.getId(), PolicyType.READ_ONLY);
                 out.setStatus("success");
                 out.setAvatar(avatarUrl);
                 return out;
