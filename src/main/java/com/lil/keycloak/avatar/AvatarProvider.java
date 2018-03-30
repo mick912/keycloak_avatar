@@ -30,6 +30,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static java.util.Arrays.asList;
 
@@ -119,9 +120,8 @@ public class AvatarProvider implements RealmResourceProvider {
                         large.getAbsolutePath()
                 );
 
-
                 String avatarUrl = System.getenv("MINIO_URL") + "/" + bucket + "/"
-                        + user.getId() + "/" + user.getId() + "%s" + "." + origExt;
+                        + user.getId() + "/" + user.getId() + "%s" + "." + origExt + "?v=" + Math.abs((new Random()).nextInt());
 
                 user.setAttribute("avatar", asList(avatarUrl));
 
